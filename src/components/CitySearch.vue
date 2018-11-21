@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- TODO: Add favorite-cities component to the template. Bind the favorites value to the favoriteCities property. -->
+    <favorite-cities v-bind:favoriteCities="favorites"></favorite-cities>
     <h2>City Search</h2>
     <message-container v-bind:messages="messages"></message-container>
     <form v-on:submit.prevent="getCities">
@@ -27,7 +27,7 @@ import WeatherSummary from '@/components/WeatherSummary';
 import WeatherData from '@/components/WeatherData';
 import CubeSpinner from '@/components/CubeSpinner';
 import MessageContainer from '@/components/MessageContainer';
-// TODO: Add Favorite Cities child component import statement here
+import FavoriteCities from '@/components/FavoriteCities';
 
 
 export default {
@@ -36,8 +36,8 @@ export default {
     'weather-summary': WeatherSummary,
     'weather-data': WeatherData,
     'load-spinner': CubeSpinner,
-    'message-container': MessageContainer
-    // TODO: Add FavoriteCities child component here
+    'message-container': MessageContainer,
+    'favorite-cities': FavoriteCities
   },
   data () {
     return {
@@ -49,14 +49,14 @@ export default {
     }
   },
   created () {
-    // TODO: Retreive the `favoriteCities` value from localstorage using this.$ls.get()
-    // HINT: Use a conditional to make sure the value exists!
-
+    if (this.$ls.get('favoriteCities')) {
+      this.favorites = this.$ls.get('favoriteCities');
+    }
   },
   methods: {
     saveCity: function (city) {
-      // TODO: Add logic to add the city to the this.favorites array and to add the city to the favoriteCities array
-
+      this.favorites.push(city);
+      this.$ls.set('favoriteCities', this.favorites);
     },
     getCities: function () {
       this.results = null;
